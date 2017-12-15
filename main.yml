@@ -1,0 +1,8 @@
+- hosts: ubuntu
+  user: ansible
+  connection: ssh
+  become: true
+  gather_facts: no
+  roles: 
+    - preconf
+  tags: preconf

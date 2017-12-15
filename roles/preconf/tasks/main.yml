@@ -1,0 +1,37 @@
+- name: install some staff
+  action: apt name={{ item }} state=installed update-cache=true
+  with_items:
+    - zsh
+    - htop
+    - iftop
+    - tcpdump
+    - mc
+    - wget
+    - elinks
+    - tmux
+    - facter
+
+- name: ADD USERS
+  user: name={{ item.user }} shell={{ item.shell }}  groups=sudo
+  with_items:
+    - "{{ssh_super_team}}"
+
+- name: ADD SSH KEY
+  authorized_key: user={{ item.user }} key="{{item.key}}"
+  with_items:
+    - "{{ssh_super_team}}"
+
+
+
+- name: copy vimrc file to the home catalogs
+  copy: src=vimrc dest=/home/{{item.user}}/.vimrc
+  with_items:
+    - "{{ssh_super_team}}"
+
+
+
+- name: get list of users
+  command: cat /etc/passwd 
+  register: vyhlop
+- debug: var=vyhlop
+
